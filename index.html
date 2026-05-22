@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINEテンプレ｜営業ツール</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f0;
+  --surface:#ffffff;
+  --surface2:#f0ede6;
+  --accent:#d4515a;
+  --accent2:#f0a0a5;
+  --pink:#fde8ea;
+  --text:#1c1a18;
+  --text2:#6b6760;
+  --text3:#a09d97;
+  --border:rgba(28,26,24,0.1);
+  --radius:12px;
+  --green:#2d7a4f;
+  --green-bg:#e8f5ee;
+}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
+header{background:var(--text);color:#fff;padding:24px 20px 20px;position:sticky;top:0;z-index:100}
+.header-inner{max-width:680px;margin:0 auto}
+.header-tag{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--accent2);margin-bottom:5px;text-transform:uppercase}
+header h1{font-size:18px;font-weight:700}
+main{max-width:680px;margin:0 auto;padding:20px 16px 0}
+.tabs{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:2px}
+.tab-btn{font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:500;padding:8px 16px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0}
+.tab-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card-label{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.08em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+.field-row{margin-bottom:14px}
+.field-label{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px}
+input[type=text],input[type=date],select{width:100%;font-family:'Noto Sans JP',sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;transition:border-color 0.15s}
+input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--accent)}
+.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.attr-option{padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);cursor:pointer;font-size:13px;text-align:center;transition:all 0.15s;user-select:none}
+.attr-option.selected{background:var(--pink);border-color:var(--accent);color:var(--accent);font-weight:500}
+.preview-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:14px;line-height:1.8;white-space:pre-wrap;word-break:break-all;color:var(--text);min-height:120px;margin-top:4px}
+.copy-btn{width:100%;margin-top:12px;font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:99px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background 0.15s,transform 0.1s;display:flex;align-items:center;justify-content:center;gap:8px}
+.copy-btn:active{transform:scale(0.97)}
+.copy-btn.copied{background:var(--green)}
+.copy-btn svg{width:18px;height:18px;flex-shrink:0}
+.hint{font-size:12px;color:var(--text3);margin-top:8px;line-height:1.6}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="header-tag">営業ツール</div>
+    <h1>LINEテンプレ</h1>
+  </div>
+</header>
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">① LINE追加直後</button>
+    <button class="tab-btn" onclick="switchTab(1)">② アポ前日</button>
+    <button class="tab-btn" onclick="switchTab(2)">③ アポ当日</button>
+  </div>
+
+  <!-- ① LINE追加直後 -->
+  <div class="panel active" id="panel-0">
+    <div class="card">
+      <div class="card-label">入力</div>
+      <div class="field-row">
+        <div class="field-label">お客様のお名前</div>
+        <input type="text" id="name0" placeholder="例：田中" oninput="update(0)" />
+      </div>
+      <div class="field-row">
+        <div class="field-label">担当者名（あなた）</div>
+        <input type="text" id="tant0" placeholder="例：あけみ" oninput="update(0)" />
+      </div>
+      <div class="field-row">
+        <div class="field-label">属性</div>
+        <div class="attr-grid" id="attr-grid">
+          <div class="attr-option selected" onclick="selectAttr(this,'パート・フルタイム')">パート・フルタイム</div>
+          <div class="attr-option" onclick="selectAttr(this,'専業主婦')">専業主婦</div>
+          <div class="attr-option" onclick="selectAttr(this,'育休中')">育休中</div>
+          <div class="attr-option" onclick="selectAttr(this,'50代以上')">50代以上</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">プレビュー</div>
+      <div class="preview-box" id="preview-0"></div>
+      <button class="copy-btn" id="copy-0" onclick="copy(0)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        コピーしてLINEに貼り付け
+      </button>
+      <p class="hint">コピー後、LINEのトーク画面に貼り付けてそのまま送信できます</p>
+    </div>
+  </div>
+
+  <!-- ② アポ前日 -->
+  <div class="panel" id="panel-1">
+    <div class="card">
+      <div class="card-label">入力不要・そのまま使えます</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7">このテンプレは名前や日付の差し込みなしで送れます。</p>
+    </div>
+    <div class="card">
+      <div class="card-label">プレビュー</div>
+      <div class="preview-box" id="preview-1"></div>
+      <button class="copy-btn" id="copy-1" onclick="copy(1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        コピーしてLINEに貼り付け
+      </button>
+      <p class="hint">コピー後、LINEのトーク画面に貼り付けてそのまま送信できます</p>
+    </div>
+  </div>
+
+  <!-- ③ アポ当日 -->
+  <div class="panel" id="panel-2">
+    <div class="card">
+      <div class="card-label">入力</div>
+      <div class="field-row">
+        <div class="field-label">お客様のお名前</div>
+        <input type="text" id="name2" placeholder="例：田中" oninput="update(2)" />
+      </div>
+      <div class="field-row">
+        <div class="field-label">相談時間</div>
+        <input type="text" id="time2" placeholder="例：14時" oninput="update(2)" />
+      </div>
+      <div class="field-row">
+        <div class="field-label">ZOOMリンク</div>
+        <input type="text" id="zoom2" placeholder="例：https://zoom.us/j/..." oninput="update(2)" />
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">プレビュー</div>
+      <div class="preview-box" id="preview-2"></div>
+      <button class="copy-btn" id="copy-2" onclick="copy(2)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        コピーしてLINEに貼り付け
+      </button>
+      <p class="hint">コピー後、LINEのトーク画面に貼り付けてそのまま送信できます</p>
+    </div>
+  </div>
+</main>
+
+<script>
+const attrLinks = {
+  'パート・フルタイム': 'https://www.youtube.com/shorts/qBAoQb3TB08',
+  '専業主婦': 'https://www.youtube.com/shorts/N1DAu99cW14',
+  '育休中': 'https://www.youtube.com/shorts/xSuYDovv4Lg',
+  '50代以上': 'https://www.youtube.com/watch?v=ZCamfUTs3m8&t=20s'
+};
+let selectedAttr = 'パート・フルタイム';
+
+function selectAttr(el, attr) {
+  document.querySelectorAll('.attr-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAttr = attr;
+  update(0);
+}
+
+function getTemplate(idx) {
+  const name0 = document.getElementById('name0')?.value || '〇〇';
+  const tant0 = document.getElementById('tant0')?.value || '〇〇';
+  const link = attrLinks[selectedAttr] || '【動画リンク】';
+
+  const name2 = document.getElementById('name2')?.value || '〇〇';
+  const time2 = document.getElementById('time2')?.value || '〇〇';
+  const zoom2 = document.getElementById('zoom2')?.value || '🔗ZOOMリンク';
+
+  if (idx === 0) return `${name0}さん、LINEの追加ありがとうございます☺️
+今回担当させて頂く${tant0}です！
+当日は、今の状況に合わせて
+在宅で収入を作るための進め方を一緒に整理します🌸
+相談前に、こちらの生徒さんインタビュー動画をご覧ください👇
+${link}
+事前に見ていただくと、当日の相談で「自分の場合はどう進めるか」がより具体的にお話しできます😊
+見終わったら
+「動画見ました」
+と送ってください✨`;
+
+  if (idx === 1) return `明日の個別相談についてのご案内です☺️
+明日は、今の状況をお聞きしながら
+在宅で収入を作るために、どんな進め方が合うかを一緒に整理していきます🌸
+事前にこちらの動画をご覧いただくと、無在庫物販の全体像がつかめて、明日の相談内容がより具体的になります✨
+① 無在庫物販ってなに？
+🎥 https://x.gd/DSmMH
+② 出品ツールってどう使うの？
+🎥 https://x.gd/lfw3I
+また、明日の個別相談はお一人ずつお時間を確保してご案内しています。
+直前キャンセルや無断欠席があると、他に相談を希望されている方のご案内が難しくなってしまうため、予定のお時間にご参加をお願いいたします☺️
+動画を見終わったら
+「動画見ました」
+と送ってください✨
+明日お話しできるのを楽しみにしています✨`;
+
+  if (idx === 2) return `${name2}さん、おはようございます☀️
+本日は${time2}から個別ご相談よろしくお願いいたします✨
+今日は、今の状況やお悩みをお聞きしながら、
+在宅で収入を作るために、どんな進め方が合っているかを一緒に整理していきます🌸
+お時間になりましたら、こちらのリンクからお入り下さい🙌
+${zoom2}
+ご予約枠はお一人ずつ確保しているため、予定のお時間にご参加をお願いします☺️
+事前に動画を見ていただいている場合は、気になったことや不安なこともそのまま聞いてくださいね✨
+それでは、お話しできるのを楽しみにしています🍀`;
+}
+
+function update(idx) {
+  const el = document.getElementById('preview-' + idx);
+  if (el) el.textContent = getTemplate(idx);
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+function copy(idx) {
+  const text = getTemplate(idx);
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-' + idx);
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> コピーしました！`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> コピーしてLINEに貼り付け`;
+    }, 2000);
+  });
+}
+
+update(0); update(1); update(2);
+</script>
+</body>
+</html>
