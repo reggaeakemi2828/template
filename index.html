@@ -8,19 +8,12 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f7f5f0;
-  --surface:#ffffff;
-  --surface2:#f0ede6;
-  --accent:#d4515a;
-  --accent2:#f0a0a5;
-  --pink:#fde8ea;
-  --text:#1c1a18;
-  --text2:#6b6760;
-  --text3:#a09d97;
-  --border:rgba(28,26,24,0.1);
-  --radius:12px;
-  --green:#2d7a4f;
-  --green-bg:#e8f5ee;
+  --bg:#f7f5f0;--surface:#ffffff;--surface2:#f0ede6;
+  --accent:#d4515a;--accent2:#f0a0a5;--pink:#fde8ea;
+  --text:#1c1a18;--text2:#6b6760;--text3:#a09d97;
+  --border:rgba(28,26,24,0.1);--radius:12px;
+  --green:#2d7a4f;--green-bg:#e8f5ee;
+  --blue:#1a6fa8;--blue-bg:#e8f2fa;
 }
 body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
 header{background:var(--text);color:#fff;padding:24px 20px 20px;position:sticky;top:0;z-index:100}
@@ -28,6 +21,20 @@ header{background:var(--text);color:#fff;padding:24px 20px 20px;position:sticky;
 .header-tag{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--accent2);margin-bottom:5px;text-transform:uppercase}
 header h1{font-size:18px;font-weight:700}
 main{max-width:680px;margin:0 auto;padding:20px 16px 0}
+.linestep-card{background:var(--surface);border:1.5px solid var(--blue);border-radius:var(--radius);padding:20px;margin-bottom:20px}
+.linestep-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.linestep-badge{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.08em;background:var(--blue-bg);color:var(--blue);border-radius:6px;padding:3px 8px;font-weight:500}
+.linestep-title{font-size:14px;font-weight:700;color:var(--text)}
+textarea.paste-area{width:100%;font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;resize:vertical;min-height:90px;line-height:1.7;transition:border-color 0.15s}
+textarea.paste-area:focus{border-color:var(--blue)}
+.parse-btn{width:100%;margin-top:10px;font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:700;padding:12px;border-radius:99px;border:none;background:var(--blue);color:#fff;cursor:pointer;transition:background 0.15s,transform 0.1s}
+.parse-btn:active{transform:scale(0.97)}
+.parse-result{margin-top:12px;display:none}
+.parse-result.show{display:block}
+.parse-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.parse-tag{font-size:12px;padding:4px 10px;border-radius:99px;background:var(--green-bg);color:var(--green);font-weight:500}
+.parse-tag.empty{background:var(--surface2);color:var(--text3)}
+.parse-hint{font-size:12px;color:var(--text3);margin-top:8px;line-height:1.6}
 .tabs{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:2px}
 .tab-btn{font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:500;padding:8px 16px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0}
 .tab-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
@@ -37,8 +44,8 @@ main{max-width:680px;margin:0 auto;padding:20px 16px 0}
 .card-label{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.08em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
 .field-row{margin-bottom:14px}
 .field-label{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px}
-input[type=text],input[type=date],select{width:100%;font-family:'Noto Sans JP',sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;transition:border-color 0.15s}
-input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--accent)}
+input[type=text]{width:100%;font-family:'Noto Sans JP',sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;transition:border-color 0.15s}
+input[type=text]:focus{border-color:var(--accent)}
 .attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .attr-option{padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);cursor:pointer;font-size:13px;text-align:center;transition:all 0.15s;user-select:none}
 .attr-option.selected{background:var(--pink);border-color:var(--accent);color:var(--accent);font-weight:500}
@@ -48,7 +55,10 @@ input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--ac
 .copy-btn.copied{background:var(--green)}
 .copy-btn svg{width:18px;height:18px;flex-shrink:0}
 .hint{font-size:12px;color:var(--text3);margin-top:8px;line-height:1.6}
-.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+.schedule-item{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.schedule-item input{flex:1}
+.del-btn{font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text3);cursor:pointer;flex-shrink:0}
+.add-btn{font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;margin-top:4px}
 </style>
 </head>
 <body>
@@ -59,32 +69,49 @@ input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--ac
   </div>
 </header>
 <main>
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab(0)">① LINE追加直後</button>
-    <button class="tab-btn" onclick="switchTab(1)">② アポ前日</button>
-    <button class="tab-btn" onclick="switchTab(2)">③ アポ当日</button>
+
+  <!-- LINEステップ情報読み込み -->
+  <div class="linestep-card">
+    <div class="linestep-header">
+      <span class="linestep-badge">STEP</span>
+      <span class="linestep-title">LINEステップ情報を貼り付けて自動入力</span>
+    </div>
+    <textarea class="paste-area" id="linestep-paste" placeholder="LINEステップ管理画面からコピーしたテキストをここに貼り付けてください&#10;&#10;例：&#10;名前：田中 花子&#10;職業：会社員（フルタイム）&#10;悩み：副業をしたい"></textarea>
+    <button class="parse-btn" onclick="parseLinestep()">自動で情報を読み込む</button>
+    <div class="parse-result" id="parse-result">
+      <div class="parse-tags" id="parse-tags"></div>
+      <p class="parse-hint" id="parse-hint"></p>
+    </div>
   </div>
 
-  <!-- ① LINE追加直後 -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">① 日程調整</button>
+    <button class="tab-btn" onclick="switchTab(1)">② LINE追加直後</button>
+    <button class="tab-btn" onclick="switchTab(2)">③ アポ前日</button>
+    <button class="tab-btn" onclick="switchTab(3)">④ アポ当日</button>
+  </div>
+
+  <!-- ① 日程調整 -->
   <div class="panel active" id="panel-0">
     <div class="card">
       <div class="card-label">入力</div>
       <div class="field-row">
         <div class="field-label">お客様のお名前</div>
-        <input type="text" id="name0" placeholder="例：田中" oninput="update(0)" />
+        <input type="text" id="name-s" placeholder="例：田中" oninput="update(0)" />
       </div>
       <div class="field-row">
         <div class="field-label">担当者名（あなた）</div>
-        <input type="text" id="tant0" placeholder="例：あけみ" oninput="update(0)" />
+        <select id="tant-s" onchange="update(0)" style="width:100%;font-family:'Noto Sans JP',sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;">
+          <option value="">選択してください</option>
+          <option value="佐野仁菜">佐野仁菜</option>
+          <option value="山下未奈">山下未奈</option>
+          <option value="井上明美">井上明美</option>
+        </select>
       </div>
       <div class="field-row">
-        <div class="field-label">属性</div>
-        <div class="attr-grid" id="attr-grid">
-          <div class="attr-option selected" onclick="selectAttr(this,'パート・フルタイム')">パート・フルタイム</div>
-          <div class="attr-option" onclick="selectAttr(this,'専業主婦')">専業主婦</div>
-          <div class="attr-option" onclick="selectAttr(this,'育休中')">育休中</div>
-          <div class="attr-option" onclick="selectAttr(this,'50代以上')">50代以上</div>
-        </div>
+        <div class="field-label">候補日程</div>
+        <div id="schedule-list"></div>
+        <button class="add-btn" onclick="addSchedule()">＋ 候補日を追加</button>
       </div>
     </div>
     <div class="card">
@@ -98,11 +125,32 @@ input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--ac
     </div>
   </div>
 
-  <!-- ② アポ前日 -->
+  <!-- ② LINE追加直後 -->
   <div class="panel" id="panel-1">
     <div class="card">
-      <div class="card-label">入力不要・そのまま使えます</div>
-      <p style="font-size:13px;color:var(--text2);line-height:1.7">このテンプレは名前や日付の差し込みなしで送れます。</p>
+      <div class="card-label">入力</div>
+      <div class="field-row">
+        <div class="field-label">お客様のお名前</div>
+        <input type="text" id="name0" placeholder="例：田中" oninput="update(1)" />
+      </div>
+      <div class="field-row">
+        <div class="field-label">担当者名（あなた）</div>
+        <select id="tant0" onchange="update(1)" style="width:100%;font-family:'Noto Sans JP',sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;">
+          <option value="">選択してください</option>
+          <option value="佐野仁菜">佐野仁菜</option>
+          <option value="山下未奈">山下未奈</option>
+          <option value="井上明美">井上明美</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field-label">属性</div>
+        <div class="attr-grid" id="attr-grid">
+          <div class="attr-option selected" onclick="selectAttr(this,'パート・フルタイム')">パート・フルタイム</div>
+          <div class="attr-option" onclick="selectAttr(this,'専業主婦')">専業主婦</div>
+          <div class="attr-option" onclick="selectAttr(this,'育休中')">育休中</div>
+          <div class="attr-option" onclick="selectAttr(this,'50代以上')">50代以上</div>
+        </div>
+      </div>
     </div>
     <div class="card">
       <div class="card-label">プレビュー</div>
@@ -115,22 +163,11 @@ input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--ac
     </div>
   </div>
 
-  <!-- ③ アポ当日 -->
+  <!-- ③ アポ前日 -->
   <div class="panel" id="panel-2">
     <div class="card">
-      <div class="card-label">入力</div>
-      <div class="field-row">
-        <div class="field-label">お客様のお名前</div>
-        <input type="text" id="name2" placeholder="例：田中" oninput="update(2)" />
-      </div>
-      <div class="field-row">
-        <div class="field-label">相談時間</div>
-        <input type="text" id="time2" placeholder="例：14時" oninput="update(2)" />
-      </div>
-      <div class="field-row">
-        <div class="field-label">ZOOMリンク</div>
-        <input type="text" id="zoom2" placeholder="例：https://zoom.us/j/..." oninput="update(2)" />
-      </div>
+      <div class="card-label">入力不要・そのまま使えます</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7">このテンプレは名前や日付の差し込みなしで送れます。</p>
     </div>
     <div class="card">
       <div class="card-label">プレビュー</div>
@@ -142,9 +179,182 @@ input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--ac
       <p class="hint">コピー後、LINEのトーク画面に貼り付けてそのまま送信できます</p>
     </div>
   </div>
+
+  <!-- ④ アポ当日 -->
+  <div class="panel" id="panel-3">
+    <div class="card">
+      <div class="card-label">入力</div>
+      <div class="field-row">
+        <div class="field-label">お客様のお名前</div>
+        <input type="text" id="name2" placeholder="例：田中" oninput="update(3)" />
+      </div>
+      <div class="field-row">
+        <div class="field-label">相談時間</div>
+        <select id="time2" onchange="update(3)" style="width:100%;font-family:'Noto Sans JP',sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;">
+          <option value="">選択してください</option>
+          <option>9時</option><option>10時</option><option>11時</option>
+          <option>12時</option><option>13時</option><option>14時</option>
+          <option>15時</option><option>16時</option><option>17時</option>
+          <option>18時</option><option>19時</option><option>20時</option>
+          <option>21時</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field-label">ZOOMリンク</div>
+        <input type="text" id="zoom2" placeholder="例：https://zoom.us/j/..." oninput="update(3)" />
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">プレビュー</div>
+      <div class="preview-box" id="preview-3"></div>
+      <button class="copy-btn" id="copy-3" onclick="copy(3)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        コピーしてLINEに貼り付け
+      </button>
+      <p class="hint">コピー後、LINEのトーク画面に貼り付けてそのまま送信できます</p>
+    </div>
+  </div>
 </main>
 
 <script>
+const userData = { name:'', job:'', attribute:'パート・フルタイム', worry:'' };
+
+const attrMap = [
+  { attr:'育休中', keywords:['育休','育児休業','育休中','産休'] },
+  { attr:'50代以上', keywords:['50代','60代','70代','50歳','51歳','52歳','53歳','54歳','55歳','56歳','57歳','58歳','59歳','60歳'] },
+  { attr:'専業主婦', keywords:['専業主婦','主婦','家事専業','無職','専業'] },
+  { attr:'パート・フルタイム', keywords:['パート','フルタイム','会社員','正社員','派遣','アルバイト','バイト','看護師','教師','公務員','自営業','フリーランス','社員','勤務','働いて'] },
+];
+
+function detectAttr(text) {
+  for (const { attr, keywords } of attrMap) {
+    if (keywords.some(k => text.includes(k))) return attr;
+  }
+  return '';
+}
+
+function parseLinestep() {
+  const raw = document.getElementById('linestep-paste').value;
+  if (!raw.trim()) return;
+  const nameMatch = raw.match(/LINE登録名\s*[\n\r]+\s*([^\n\r]+)/) ||
+                    raw.match(/名前[：:]\s*([^\n\r]+)/) ||
+                    raw.match(/お名前[：:]\s*([^\n\r]+)/) ||
+                    raw.match(/氏名[：:]\s*([^\n\r]+)/) ||
+                    raw.match(/^([^\n\r]{1,20})$/m);
+  if (nameMatch) userData.name = nameMatch[1].trim().replace(/\s*(さん|様)$/, '');
+  const jobMatch = raw.match(/現在のご職業は？\s*([^\n\r]+)/) ||
+                   raw.match(/職業[：:]\s*([^\n\r]+)/) ||
+                   raw.match(/仕事[：:]\s*([^\n\r]+)/) ||
+                   raw.match(/お仕事[：:]\s*([^\n\r]+)/);
+  if (jobMatch) userData.job = jobMatch[1].trim();
+  const attrSource = userData.job || raw;
+  const detectedAttr = detectAttr(attrSource);
+  if (detectedAttr) userData.attribute = detectedAttr;
+  const worryMatch = raw.match(/悩み[：:]\s*([^\n\r]+)/) || raw.match(/相談[：:]\s*([^\n\r]+)/) || raw.match(/お悩み[：:]\s*([^\n\r]+)/) || raw.match(/課題[：:]\s*([^\n\r]+)/);
+  if (worryMatch) userData.worry = worryMatch[1].trim();
+  applyUserData();
+  showParseResult();
+}
+
+function applyUserData() {
+  if (userData.name) {
+    ['name-s','name0','name2'].forEach(id => { const el = document.getElementById(id); if(el) el.value = userData.name; });
+  }
+  if (userData.attribute) {
+    document.querySelectorAll('.attr-option').forEach(el => {
+      el.classList.remove('selected');
+      if (el.textContent.trim() === userData.attribute) { el.classList.add('selected'); selectedAttr = userData.attribute; }
+    });
+  }
+  update(0); update(1); update(2); update(3);
+}
+
+function showParseResult() {
+  const result = document.getElementById('parse-result');
+  const tags = document.getElementById('parse-tags');
+  const hint = document.getElementById('parse-hint');
+  result.classList.add('show');
+  const fields = [
+    { label:'名前', value:userData.name },
+    { label:'職業', value:userData.job },
+    { label:'属性', value:userData.attribute },
+    { label:'悩み', value:userData.worry },
+  ];
+  tags.innerHTML = fields.map(f => `<span class="parse-tag ${f.value?'':'empty'}">${f.label}：${f.value||'未取得'}</span>`).join('');
+  const missing = fields.filter(f => !f.value).map(f => f.label);
+  hint.textContent = missing.length ? `※「${missing.join('・')}」は取得できませんでした。手入力してください。` : '✓ 全項目を自動入力しました！';
+}
+
+// スケジュール管理
+const TIME_OPTIONS = ['','9時〜','10時〜','11時〜','12時〜','13時〜','14時〜','15時〜','16時〜','17時〜','18時〜','19時〜','20時〜','21時〜'];
+
+function makeTimeSelect(val='') {
+  return `<select onchange="update(0)" style="font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:8px 6px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);outline:none;">
+    ${TIME_OPTIONS.map(t => `<option${t===val?' selected':''}>${t||'時間'}</option>`).join('')}
+  </select>`;
+}
+
+function makeScheduleItem(dateVal='') {
+  const div = document.createElement('div');
+  div.className = 'schedule-item';
+  div.style.cssText = 'background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:10px;';
+  div.innerHTML = `
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+      <input type="date" value="${dateVal}" onchange="update(0)" style="flex:1;font-family:'Noto Sans JP',sans-serif;font-size:14px;padding:9px 8px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;" />
+      <button class="del-btn" onclick="removeSchedule(this.closest('.schedule-item'))" style="padding:8px 10px;">✕</button>
+    </div>
+    <div class="time-list" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+      ${makeTimeSelect()}
+      <button onclick="addTimeSlot(this)" style="font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;">＋時間追加</button>
+    </div>`;
+  return div;
+}
+
+function addTimeSlot(btn) {
+  const timeList = btn.closest('.time-list');
+  const sel = document.createElement('span');
+  sel.innerHTML = makeTimeSelect();
+  timeList.insertBefore(sel, btn);
+  update(0);
+}
+
+function addSchedule() {
+  document.getElementById('schedule-list').appendChild(makeScheduleItem());
+  update(0);
+}
+
+function removeSchedule(item) {
+  const items = document.querySelectorAll('.schedule-item');
+  if (items.length > 1) { item.remove(); update(0); }
+}
+
+function getSchedules() {
+  const weekdays = ['日','月','火','水','木','金','土'];
+  const result = [];
+  document.querySelectorAll('#schedule-list .schedule-item').forEach(item => {
+    const dateVal = item.querySelector('input[type=date]')?.value;
+    if (!dateVal) return;
+    const d = new Date(dateVal);
+    const dateStr = `${d.getMonth()+1}/${d.getDate()}（${weekdays[d.getDay()]}）`;
+    const times = Array.from(item.querySelectorAll('select'))
+      .map(s => s.value).filter(v => v && v !== '時間');
+    if (times.length === 0) {
+      result.push(dateStr);
+    } else if (times.length === 1) {
+      result.push(`${dateStr} ${times[0]}`);
+    } else {
+      result.push(`${dateStr} ${times.join('・')}`);
+    }
+  });
+  return result;
+}
+
+// 初期3件生成
+(function initSchedules() {
+  const list = document.getElementById('schedule-list');
+  for (let i = 0; i < 3; i++) list.appendChild(makeScheduleItem());
+})();
+
 const attrLinks = {
   'パート・フルタイム': 'https://www.youtube.com/shorts/qBAoQb3TB08',
   '専業主婦': 'https://www.youtube.com/shorts/N1DAu99cW14',
@@ -157,19 +367,41 @@ function selectAttr(el, attr) {
   document.querySelectorAll('.attr-option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   selectedAttr = attr;
-  update(0);
+  userData.attribute = attr;
+  update(1);
 }
 
 function getTemplate(idx) {
+  const nameS = document.getElementById('name-s')?.value || '〇〇';
+  const tantS = document.getElementById('tant-s')?.value || '〇〇';
+  const schedules = getSchedules();
+  const scheduleText = schedules.length > 0
+    ? schedules.map(s => `・${s}`).join('\n')
+    : '・候補日程を入力してください';
+
   const name0 = document.getElementById('name0')?.value || '〇〇';
   const tant0 = document.getElementById('tant0')?.value || '〇〇';
-  const link = attrLinks[selectedAttr] || '【動画リンク】';
-
+  const link  = attrLinks[selectedAttr] || '【動画リンク】';
   const name2 = document.getElementById('name2')?.value || '〇〇';
-  const time2 = document.getElementById('time2')?.value || '〇〇';
+  const time2 = document.getElementById('time2')?.value || '〇〇時';
   const zoom2 = document.getElementById('zoom2')?.value || '🔗ZOOMリンク';
 
-  if (idx === 0) return `${name0}さん、LINEの追加ありがとうございます☺️
+  if (idx === 0) return `${nameS}さん
+
+この度担当させていただく ${tantS} です😊
+
+個別相談では、お一人おひとりに合わせて丁寧にアドバイスさせていただきますので、当日はどうぞよろしくお願いいたします✨
+
+早速ですが、ZOOMでの面談日程について、
+「約1時間ほど」以下の候補の中からご都合の良い日時をお選びください！
+
+${scheduleText}
+
+ご都合合うところありますでしょうか？☺️💡
+
+もし、無ければ、${nameS}さんのご希望日もいくつかいただけると調整しやすいのでありがたいです🙇🏻‍♀️✨`;
+
+  if (idx === 1) return `${name0}さん、LINEの追加ありがとうございます☺️
 今回担当させて頂く${tant0}です！
 当日は、今の状況に合わせて
 在宅で収入を作るための進め方を一緒に整理します🌸
@@ -180,7 +412,7 @@ ${link}
 「動画見ました」
 と送ってください✨`;
 
-  if (idx === 1) return `明日の個別相談についてのご案内です☺️
+  if (idx === 2) return `明日の個別相談についてのご案内です☺️
 明日は、今の状況をお聞きしながら
 在宅で収入を作るために、どんな進め方が合うかを一緒に整理していきます🌸
 事前にこちらの動画をご覧いただくと、無在庫物販の全体像がつかめて、明日の相談内容がより具体的になります✨
@@ -195,7 +427,7 @@ ${link}
 と送ってください✨
 明日お話しできるのを楽しみにしています✨`;
 
-  if (idx === 2) return `${name2}さん、おはようございます☀️
+  if (idx === 3) return `${name2}さん、おはようございます☀️
 本日は${time2}から個別ご相談よろしくお願いいたします✨
 今日は、今の状況やお悩みをお聞きしながら、
 在宅で収入を作るために、どんな進め方が合っているかを一緒に整理していきます🌸
@@ -229,7 +461,7 @@ function copy(idx) {
   });
 }
 
-update(0); update(1); update(2);
+update(0); update(1); update(2); update(3);
 </script>
 </body>
 </html>
